@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FlashyFind — Flash Deals Every Day</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --card: #1a1a24;
+    --accent: #ff4d00;
+    --accent2: #ffb800;
+    --text: #f0ede8;
+    --muted: #8a8790;
+    --border: rgba(255,255,255,0.07);
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; overflow-x: hidden; }
+
+  /* NAV */
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 2.5rem; background: rgba(10,10,15,0.92); backdrop-filter: blur(12px); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
+  .logo { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; letter-spacing: -0.03em; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .nav-icon { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.1rem; position: relative; }
+  .badge { position: absolute; top: -6px; right: -6px; background: var(--accent); color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 10px; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); }
+  .nav-btn { background: var(--accent); color: white; border: none; padding: 0.5rem 1.2rem; border-radius: 50px; font-family: var(--font-body); font-weight: 500; font-size: 0.85rem; cursor: pointer; transition: opacity 0.2s; }
+  .nav-btn:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero { padding: 5rem 2.5rem 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .hero-eyebrow { font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  .hero-title { font-family: var(--font-head); font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.04em; margin-bottom: 1.5rem; }
+  .hero-title em { font-style: normal; color: var(--accent2); }
+  .hero-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 440px; margin-bottom: 2rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: white; border: none; padding: 0.85rem 2rem; border-radius: 50px; font-family: var(--font-body); font-weight: 500; font-size: 0.95rem; cursor: pointer; transition: transform 0.18s, box-shadow 0.18s; box-shadow: 0 4px 20px rgba(255,77,0,0.35); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,77,0,0.45); }
+  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 0.85rem 2rem; border-radius: 50px; font-family: var(--font-body); font-weight: 500; font-size: 0.95rem; cursor: pointer; transition: border-color 0.2s; }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); }
+  .hero-visual { display: flex; flex-direction: column; gap: 1rem; }
+  .hero-card-big { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 1.5rem; display: flex; gap: 1.2rem; align-items: center; animation: floatUp 0.7s ease both; }
+  .hero-card-sm { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; animation: floatUp 0.7s 0.15s ease both; }
+  .hero-card-sm2 { background: linear-gradient(135deg, #ff4d00, #ff8c42); border-radius: 16px; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; animation: floatUp 0.7s 0.3s ease both; }
+  @keyframes floatUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .product-thumb { width: 64px; height: 64px; border-radius: 12px; background: linear-gradient(135deg, #2a2a3a, #3a3a4a); display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
+  .product-info { flex: 1; }
+  .product-name { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .product-cat { font-size: 0.78rem; color: var(--muted); }
+  .product-price { font-family: var(--font-head); font-weight: 700; color: var(--accent2); }
+  .flash-label { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.06em; color: white; }
+  .flash-val { font-family: var(--font-head); font-size: 1.5rem; font-weight: 800; color: white; }
+
+  /* TICKER */
+  .ticker-wrap { background: var(--accent); padding: 0.6rem 0; overflow: hidden; white-space: nowrap; }
+  .ticker { display: inline-flex; gap: 3rem; animation: ticker 18s linear infinite; }
+  .ticker span { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: white; }
+  .ticker span::before { content: '⚡ '; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* SECTION COMMON */
+  section { max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem; }
+  .section-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+  .section-title { font-family: var(--font-head); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+
+  /* CATEGORIES */
+  .cats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+  .cat-pill { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: border-color 0.2s, transform 0.2s; }
+  .cat-pill:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .cat-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+  .cat-name { font-family: var(--font-head); font-size: 0.9rem; font-weight: 700; }
+  .cat-count { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* PRODUCTS */
+  .products-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 1.5rem; }
+  .filter-tabs { display: flex; gap: 0.5rem; }
+  .filter-tab { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; cursor: pointer; font-family: var(--font-body); transition: all 0.2s; }
+  .filter-tab.active, .filter-tab:hover { background: var(--accent); border-color: var(--accent); color: white; }
+  .view-all { color: var(--accent); font-size: 0.85rem; text-decoration: none; font-weight: 500; }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1.25rem; }
+  .product-card { background: var(--card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; cursor: pointer; transition: transform 0.22s, border-color 0.22s; position: relative; }
+  .product-card:hover { transform: translateY(-4px); border-color: rgba(255,77,0,0.3); }
+  .product-img { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(135deg, #1e1e28, #2a2a38); position: relative; }
+  .sale-badge { position: absolute; top: 10px; left: 10px; background: var(--accent); color: white; font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 50px; letter-spacing: 0.05em; }
+  .wishlist-btn { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.08); border: none; color: var(--muted); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .wishlist-btn:hover { background: rgba(255,77,0,0.2); color: var(--accent); }
+  .product-body { padding: 1rem 1.1rem 1.2rem; }
+  .p-name { font-family: var(--font-head); font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; line-height: 1.3; }
+  .p-brand { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .p-footer { display: flex; align-items: center; justify-content: space-between; }
+  .p-price { font-family: var(--font-head); font-weight: 800; color: var(--text); }
+  .p-old { font-size: 0.75rem; color: var(--muted); text-decoration: line-through; margin-left: 0.4rem; }
+  .stars { font-size: 0.7rem; color: var(--accent2); }
+  .add-cart { background: var(--accent); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: transform 0.15s; }
+  .add-cart:hover { transform: scale(1.1); }
+
+  /* FLASH SALE BANNER */
+  .flash-banner { background: linear-gradient(135deg, #1a0d00, #2a1500); border: 1px solid rgba(255,77,0,0.25); border-radius: 24px; padding: 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; position: relative; overflow: hidden; margin: 0 2.5rem; }
+  .flash-banner::before { content: ''; position: absolute; right: -60px; top: -60px; width: 260px; height: 260px; background: radial-gradient(circle, rgba(255,77,0,0.15), transparent 70%); border-radius: 50%; }
+  .flash-title { font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.04em; }
+  .flash-title em { font-style: normal; color: var(--accent); }
+  .flash-sub { color: var(--muted); margin-top: 0.5rem; font-size: 0.95rem; }
+  .countdown { display: flex; gap: 1rem; margin-top: 1.5rem; }
+  .cd-box { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 0.8rem 1rem; text-align: center; min-width: 64px; }
+  .cd-num { font-family: var(--font-head); font-size: 1.8rem; font-weight: 800; line-height: 1; }
+  .cd-label { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
+  .flash-right { text-align: right; }
+  .flash-discount { font-family: var(--font-head); font-size: 5rem; font-weight: 800; line-height: 1; color: var(--accent); }
+  .flash-off { font-size: 1.2rem; font-weight: 700; color: var(--accent2); }
+
+  /* NEWSLETTER */
+  .newsletter { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 2.5rem; text-align: center; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  .nl-title { font-family: var(--font-head); font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+  .nl-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .nl-form { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+  .nl-input { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 0.7rem 1.2rem; border-radius: 50px; font-family: var(--font-body); font-size: 0.9rem; width: 280px; outline: none; transition: border-color 0.2s; }
+  .nl-input:focus { border-color: var(--accent); }
+  .nl-input::placeholder { color: var(--muted); }
+
+  /* FOOTER */
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 2.5rem 1.5rem; margin-top: 4rem; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2rem; max-width: 1200px; margin: 0 auto 2rem; }
+  .footer-logo { font-family: var(--font-head); font-size: 1.3rem; font-weight: 800; margin-bottom: 0.8rem; }
+  .footer-logo span { color: var(--accent); }
+  .footer-tagline { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+  .footer-heading { font-family: var(--font-head); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--text); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; max-width: 1200px; margin: 0 auto; }
+  .footer-bottom p { color: var(--muted); font-size: 0.8rem; }
+  .social-links { display: flex; gap: 0.8rem; }
+  .social-btn { width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: border-color 0.2s, color 0.2s; }
+  .social-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem 2rem; }
+    .hero-visual { display: none; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .flash-banner { margin: 0 1.5rem; padding: 2rem; }
+    section { padding: 3rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">Flashy<span>Find</span></div>
+  <ul class="nav-links">
+    <li><a href="#">New Arrivals</a></li>
+    <li><a href="#">Flash Deals</a></li>
+    <li><a href="#">Brands</a></li>
+    <li><a href="#">Sale</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-icon">🔍</button>
+    <button class="nav-icon">❤️</button>
+    <button class="nav-icon" style="position:relative;">🛒 <span class="badge">3</span></button>
+    <button class="nav-btn">Sign In</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div style="max-width:1200px;margin:0 auto;">
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">⚡ New drops every 24 hours</p>
+      <h1 class="hero-title">Find it.<br/><em>Flash</em> it.<br/>Love it.</h1>
+      <p class="hero-sub">Discover exclusive deals on fashion, tech, and lifestyle — before they're gone. New finds drop daily at FlashyFind.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Shop Now →</button>
+        <button class="btn-ghost">View Flash Deals</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-big">
+        <div class="product-thumb">👟</div>
+        <div class="product-info">
+          <div class="product-name">AirMax Pro X</div>
+          <div class="product-cat">Footwear · Trending</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="product-price">$89</div>
+          <div style="font-size:0.75rem;color:var(--muted);text-decoration:line-through;">$140</div>
+        </div>
+      </div>
+      <div class="hero-card-sm">
+        <div style="display:flex;align-items:center;gap:0.8rem;">
+          <div class="product-thumb" style="width:44px;height:44px;font-size:1.2rem;">📱</div>
+          <div>
+            <div class="product-name" style="font-size:0.85rem;">Galaxy Tab S</div>
+            <div style="font-size:0.7rem;color:var(--muted);">Electronics</div>
+          </div>
+        </div>
+        <div style="font-family:var(--font-head);font-weight:800;color:var(--accent2);">$499</div>
+      </div>
+      <div class="hero-card-sm2">
+        <div>
+          <div class="flash-label">Today's Flash Deal</div>
+          <div class="flash-val">Up to 70% OFF</div>
+        </div>
+        <div style="font-size:2.5rem;">⚡</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span>Free shipping over $50</span>
+    <span>Flash deals every 24hrs</span>
+    <span>New arrivals daily</span>
+    <span>Exclusive member discounts</span>
+    <span>30-day easy returns</span>
+    <span>Free shipping over $50</span>
+    <span>Flash deals every 24hrs</span>
+    <span>New arrivals daily</span>
+    <span>Exclusive member discounts</span>
+    <span>30-day easy returns</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section>
+  <p class="section-label">Browse</p>
+  <h2 class="section-title">Shop by Category</h2>
+  <div class="cats">
+    <div class="cat-pill"><div class="cat-emoji">👟</div><div class="cat-name">Footwear</div><div class="cat-count">2,400+ items</div></div>
+    <div class="cat-pill"><div class="cat-emoji">📱</div><div class="cat-name">Electronics</div><div class="cat-count">1,800+ items</div></div>
+    <div class="cat-pill"><div class="cat-emoji">👗</div><div class="cat-name">Fashion</div><div class="cat-count">5,200+ items</div></div>
+    <div class="cat-pill"><div class="cat-emoji">🏠</div><div class="cat-name">Home</div><div class="cat-count">3,100+ items</div></div>
+    <div class="cat-pill"><div class="cat-emoji">💄</div><div class="cat-name">Beauty</div><div class="cat-count">900+ items</div></div>
+    <div class="cat-pill"><div class="cat-emoji">🎮</div><div class="cat-name">Gaming</div><div class="cat-count">620+ items</div></div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section style="padding-top:0;">
+  <div class="products-header">
+    <div>
+      <p class="section-label">Trending</p>
+      <h2 class="section-title" style="margin-bottom:0;">Hot Right Now</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:1.5rem;">
+      <div class="filter-tabs">
+        <button class="filter-tab active">All</button>
+        <button class="filter-tab">New</button>
+        <button class="filter-tab">Sale</button>
+      </div>
+      <a href="#" class="view-all">View all →</a>
+    </div>
+  </div>
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-img">👟<span class="sale-badge">−37%</span><button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">Nike</div>
+        <div class="p-name">Air Max Pulse React</div>
+        <div class="p-footer">
+          <div><span class="p-price">$89</span><span class="p-old">$140</span></div>
+          <div class="stars">★★★★★</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">🎧<span class="sale-badge">NEW</span><button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">Sony</div>
+        <div class="p-name">WH-1000XM6 Headphones</div>
+        <div class="p-footer">
+          <div><span class="p-price">$349</span></div>
+          <div class="stars">★★★★☆</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">👜<span class="sale-badge">−50%</span><button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">Coach</div>
+        <div class="p-name">Tabby Shoulder Bag</div>
+        <div class="p-footer">
+          <div><span class="p-price">$198</span><span class="p-old">$395</span></div>
+          <div class="stars">★★★★★</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">⌚<button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">Apple</div>
+        <div class="p-name">Watch Series 10 Titanium</div>
+        <div class="p-footer">
+          <div><span class="p-price">$699</span></div>
+          <div class="stars">★★★★★</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">🕶️<span class="sale-badge">−20%</span><button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">Ray-Ban</div>
+        <div class="p-name">Aviator Classic Gold</div>
+        <div class="p-footer">
+          <div><span class="p-price">$120</span><span class="p-old">$150</span></div>
+          <div class="stars">★★★★☆</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">🎮<span class="sale-badge">HOT</span><button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">PlayStation</div>
+        <div class="p-name">DualSense Edge Controller</div>
+        <div class="p-footer">
+          <div><span class="p-price">$199</span></div>
+          <div class="stars">★★★★★</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">👒<span class="sale-badge">−45%</span><button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">Gucci</div>
+        <div class="p-name">Canvas Bucket Hat</div>
+        <div class="p-footer">
+          <div><span class="p-price">$220</span><span class="p-old">$400</span></div>
+          <div class="stars">★★★★☆</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+    <div class="product-card">
+      <div class="product-img">💻<span class="sale-badge">NEW</span><button class="wishlist-btn">♡</button></div>
+      <div class="product-body">
+        <div class="p-brand">Apple</div>
+        <div class="p-name">MacBook Air M4 15"</div>
+        <div class="p-footer">
+          <div><span class="p-price">$1,299</span></div>
+          <div class="stars">★★★★★</div>
+          <button class="add-cart">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FLASH SALE BANNER -->
+<div class="flash-banner">
+  <div>
+    <h2 class="flash-title">⚡ <em>Flash</em> Sale<br/>Ends Soon</h2>
+    <p class="flash-sub">Grab top deals before the timer hits zero</p>
+    <div class="countdown">
+      <div class="cd-box"><div class="cd-num" id="cd-h">04</div><div class="cd-label">Hours</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-m">32</div><div class="cd-label">Mins</div></div>
+      <div class="cd-box"><div class="cd-num" id="cd-s">17</div><div class="cd-label">Secs</div></div>
+    </div>
+    <button class="btn-primary" style="margin-top:1.5rem;">Shop Flash Deals →</button>
+  </div>
+  <div class="flash-right">
+    <div class="flash-discount">70%</div>
+    <div class="flash-off">OFF selected items</div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section style="padding-bottom:2rem;">
+  <div class="newsletter">
+    <p class="section-label">Stay Ahead</p>
+    <h2 class="nl-title">Get flash deals first</h2>
+    <p class="nl-sub">Join 200,000+ shoppers. Get notified before deals go live.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="your@email.com" />
+      <button class="btn-primary">Notify Me ⚡</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Flashy<span>Find</span></div>
+      <p class="footer-tagline">Your daily destination for flash deals on fashion, tech, beauty, and more. New finds, every single day.</p>
+    </div>
+    <div>
+      <div class="footer-heading">Shop</div>
+      <ul class="footer-links">
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Flash Deals</a></li>
+        <li><a href="#">Top Brands</a></li>
+        <li><a href="#">Gift Cards</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Help</div>
+      <ul class="footer-links">
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-heading">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Affiliates</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 FlashyFind. All rights reserved.</p>
+    <div class="social-links">
+      <a href="#" class="social-btn">𝕏</a>
+      <a href="#" class="social-btn">in</a>
+      <a href="#" class="social-btn">ig</a>
+      <a href="#" class="social-btn">yt</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Countdown Timer
+  let h = 4, m = 32, s = 17;
+  setInterval(() => {
+    s--;
+    if (s < 0) { s = 59; m--; }
+    if (m < 0) { m = 59; h--; }
+    if (h < 0) { h = 0; m = 0; s = 0; }
+    document.getElementById('cd-h').textContent = String(h).padStart(2, '0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2, '0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2, '0');
+  }, 1000);
+
+  // Wishlist Toggle
+  document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      btn.textContent = btn.textContent === '♡' ? '♥' : '♡';
+      btn.style.color = btn.textContent === '♥' ? '#ff4d00' : '';
+    });
+  });
+
+  // Add to Cart
+  document.querySelectorAll('.add-cart').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      btn.textContent = '✓';
+      btn.style.background = '#22c55e';
+      setTimeout(() => { btn.textContent = '+'; btn.style.background = ''; }, 1200);
+    });
+  });
+
+  // Filter Tabs
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
